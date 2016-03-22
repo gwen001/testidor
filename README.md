@@ -34,3 +34,6 @@ Examples:
 
 I don't believe in license.  
 You can do want you want with this program.  
+
+![PoC on bWAPP]
+(https://raw.githubusercontent.com/gwen001/testidor/master/testidor_bwapp.png)
