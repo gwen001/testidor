@@ -64,8 +64,8 @@ class TestIdor
 		echo "\n";
 		echo "Options:\n";
 		echo "\t-h\tprint this help\n";
-		echo "\t-s\tforce https\n";
-		echo "\t-t\tset tolerance for result output\n";
+		echo "\t-s\tforce https, default=off\n";
+		echo "\t-t\tset tolerance for result output, default=5\n";
 		echo "\n";
 		echo "Payloads:\n";
 		echo "\tThe program can deal with mutiple payloads\n";

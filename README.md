@@ -8,8 +8,8 @@ Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
 
 Options:
 	-h	print this help
-	-s	force https
-	-t	set tolerance for result output
+	-s	force https, default=off
+	-t	set tolerance for result output, default=5
 
 Payloads:
 	The program can deal with mutiple payloads
