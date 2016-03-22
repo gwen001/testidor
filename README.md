@@ -32,4 +32,5 @@ Examples:
 	testidor.php -t 10 -s -p "|=5;^=bob,alice,jim;$=123,456,789" -f request.txt
 ```
 
-I don't believe in license. You can do want you want with this program.
+I don't believe in license.
+You can do want you want with this program.
