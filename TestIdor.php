@@ -268,7 +268,7 @@ class TestIdor
 			if( $this->isReference($r) ) {
 				// this is the reference
 				$color = 'dark_grey';
-				$text .= ' -> NORMAL';
+				$text .= ' -> REFERENCE';
 			} else {
 				$r->setIdor(true);
 				$text .= ' -> SOUNDS GOOD';
