@@ -1,5 +1,7 @@
 # TestIdor
-PHP tool to test IDOR.
+PHP tool to test Insecure Direct Object Reference aka IDOR.
+A payload can be injected at multiple places, so each original values will be replaced at the same time.
+A relative payload means that the original value will be incremented and decremented.
 
 ```
 Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
@@ -27,7 +29,7 @@ Payloads:
 Examples:
 	testidor.php -p "§=10" -f request.txt
 	testidor.php -s -p "^=bob,alice,jim" -f request.txt
-	testidor.php -t 10 -s -p "§=5;^=bob,alice,jim;$=123,456,789" -f request.txt
+	testidor.php -t 10 -s -p "|=5;^=bob,alice,jim;$=123,456,789" -f request.txt
 ```
 
 I don't believe in license. You can do want you want with this program.
