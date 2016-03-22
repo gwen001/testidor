@@ -1,139 +1,126 @@
 <?php
 
-include( 'Idor.php' );
+/**
+ * I don't believe in license
+ * You can do want you want with this program
+ * - gwen -
+ */
+
 include( 'Utils.php' );
+include( 'TestIdor.php' );
+include( 'TestIdorRequest.php' );
 
 
-function usage( $error='' ) {
-	echo "Usage: ".$_SERVER['argv'][0]." <request file> <step> [tolerance]\n";
-	if( $error ) {
-		echo "Error: ".$error."!\n";
-	}
-	exit();
-}
-
-
-if( $_SERVER['argc']<3 || $_SERVER['argc']>4 ) {
-	usage();
-}
-
-$step = (int)$_SERVER['argv'][2];
-//var_dump( $step );
-
-if( $_SERVER['argc'] == 4 ) {
-	$tolerance = (int)$_SERVER['argv'][3];
-	if ($tolerance <= 0) {
-		$tolerance = Idor::DEFAULT_TOLERANCE;
-	}
-} else {
-	$tolerance = Idor::DEFAULT_TOLERANCE;
-}
-
-$request_file = $_SERVER['argv'][1];
-//var_dump( $request_file );
-if( !is_file($request_file) ) {
-	usage( 'File not found' );
-}
-
-$request = trim( file_get_contents($request_file) ); // la totalité de la requête
-$request = str_replace( "\r", "", $request );
-$t_request = explode( "\n\n", $request );
-//var_dump( $t_request );
-$t_headers = explode( "\n", $t_request[0] ); // les headers
-//var_dump( $t_headers );
-$h_request = array_map( function($str){return explode(':',trim($str));}, $t_headers ); // les headers découpés
-//var_dump( $h_request );
-
-// traitement de la 1ère ligne (method, url, http)
-$first = array_shift( $t_headers );
-//var_dump( $first );
-list($method,$url,$http) = explode( ' ', $first );
-//var_dump( $method );
-//var_dump( $url );
-//var_dump( $http );
-//exit();
-
-// traitement des paramètres (post)
-$params = '';
-if( count($t_request) > 1 ) {
-	$params = $t_request[1];
-}
-
-
-$h_replay = array();
-$cookies = '';
-
-
-foreach( $h_request as $header )
+// parse command line
 {
-	$h = trim( array_shift($header) );
+	$testidor = new TestIdor();
+	$ssl = false;
+	$argc = $_SERVER['argc'] - 1;
 
-	switch( $h )
-	{
-		case 'User-Agent':
-		case 'Referer':
-			$h_replay[ $h ] = $h.': '.trim( implode(':',$header) );
-			break;
+	for ($i = 1; $i <= $argc; $i++) {
+		switch ($_SERVER['argv'][$i]) {
+			case '-f':
+				$testidor->setRequestFile($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
 
-		case 'Cookie':
-			$cookies = $h.': '.trim( implode(':',$header) );
-			break;
+			case '-h':
+				TestIdor::help();
+				break;
 
-		case 'Host':
-			$url = 'http://'.trim(implode('',$header)).$url;
-			break;
+			case '-s':
+				$ssl = true;
+				break;
 
-		case 'Accept':
-		case 'Accept-Language':
-		case 'Accept-Encoding':
-		default:
-			break;
+			case '-t':
+				$testidor->setTolerance($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
+
+			case '-p':
+				$testidor->parsePayloads($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
+		}
 	}
-}
 
-//var_dump($method);
-//var_dump($url);
-//var_dump($http);
-//var_dump($h_replay);
-//var_dump($cookies);
-//var_dump($params);
+	if (!$testidor->getRequestFile()) {
+		TestIdor::help('Request file not found!');
+	}
 
+	if (!$testidor->getPayloads()) {
+		TestIdor::help('Payloads not found!');
+	}
 
-// requête de référence
-{
-	$reference = new Idor();
-	$reference->setUrl( $url );
-	$reference->method = $method;
-	$reference->http = $http;
-	$reference->setHeaders( $h_replay );
-	$reference->setCookies( $cookies );
-	$reference->setParams( $params );
-
-	$reference->request();
-	//var_dump( $reference );
-	//exit();
-
-	$tolerance2 = (int)($reference->getResultLength() * $tolerance / 100);
-	echo "\nRC=".$reference->getResultCode().', RL='.$reference->getResultLength().', T='.$tolerance.'%, T2='.$tolerance2."\n";
-	$tolerance = $tolerance2;
+	//var_dump($testidor);
 	//exit();
 }
 // ---
 
 
-// fonction principale
+// parse request file
 {
-	echo "\n------------------ URL ------------------\n";
-	Idor::run( 'getUrl', 'setUrl' );
-	echo "\n------------------ HEADERS ------------------\n";
-	foreach( $h_replay as $k=>$v ) {
-		Idor::run( 'getHeader', 'setHeader', $k );
+	$request = trim( file_get_contents($testidor->getRequestFile()) ); // the full request
+	$request = str_replace( "\r", "", $request );
+	$t_request = explode( "\n\n", $request ); // separate headers and post parameters
+	$t_headers = explode( "\n", $t_request[0] ); // headers
+	$h_request = array_map( function($str){return explode(':',trim($str));}, $t_headers ); // splited headers
+
+	$first = array_shift( $t_headers ); // first ligne is: method, url, http version
+	list($method,$url,$http) = explode( ' ', $first );
+
+	$post = ''; // post parameters
+	if( count($t_request) > 1 ) {
+		$post = $t_request[1];
 	}
-	echo "\n------------------ COOKIES ------------------\n";
-	Idor::run( 'getCookies', 'setCookies' );
-	echo "\n------------------ POST DATA ------------------\n";
-	Idor::run( 'getParams', 'setParams' );
-	echo "\n";
+
+	$host = '';
+	$cookies = '';
+	$h_replay = array(); // headers kept in the replay request
+
+	foreach( $h_request as $header )
+	{
+		$h = trim( array_shift($header) );
+
+		switch( $h )
+		{
+			case 'Accept':
+			case 'Accept-Language':
+			case 'Accept-Encoding':
+			case 'Connection':
+			case 'Content-Type':
+			case 'Referer':
+			case 'User-Agent':
+				$h_replay[ $h ] = $h.': '.trim( implode(':',$header) );
+				break;
+
+			case 'Cookie':
+				$cookies = $h.': '.trim( implode(':',$header) );
+				break;
+
+			case 'Host':
+				$host = trim( implode(':',$header) );
+				break;
+
+			case 'Content-Length':
+			default:
+				break;
+		}
+	}
+}
+// ---
+
+
+// reference request
+{
+	$testidor->createReference( $host, $ssl, $url, $method, $http, $h_replay, $cookies, $post );
+}
+// ---
+
+
+// main loop
+{
+	$testidor->run();
 }
 // ---
 
