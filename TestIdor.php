@@ -14,6 +14,13 @@ class TestIdor
 	const PAYLOADS_CONSIDER_RELATIVE = 100;
 
 	/**
+	 * @var TestIdorRequest
+	 *
+	 * reference request
+	 */
+	private $reference = null;
+
+	/**
 	 * @var int
 	 *
 	 * tolerance for output result
@@ -22,25 +29,11 @@ class TestIdor
 	private $_tolerance = 0; // real value
 
 	/**
-	 * @var string
-	 *
-	 * request file
-	 */
-	private $request_file = null;
-
-	/**
 	 * @var array
 	 *
 	 * payloads table
 	 */
 	private $t_payloads = null;
-
-	/**
-	 * @var TestIdorRequest
-	 *
-	 * reference reques
-	 */
-	private $reference = null;
 
 	/**
 	 * @var string
@@ -115,19 +108,6 @@ class TestIdor
 	}
 
 
-	public function getRequestFile() {
-		return $this->request_file;
-	}
-	public function setRequestFile( $v ) {
-		if( is_file($v) ) {
-			$this->request_file = $v;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
 	public function getPayloads() {
 		if( is_array($this->t_payloads) && count($this->t_payloads) ) {
 			return $this->t_payloads;
@@ -173,21 +153,19 @@ class TestIdor
 	}
 
 
-	public function createReference( $host, $ssl, $url, $method, $http, $h_replay, $cookies, $post )
+	public function getReference() {
+		return $this->reference;
+	}
+	public function setReference( $v ) {
+		$this->reference = $v;
+		return true;
+	}
+
+	public function runReference()
 	{
 		$this->chars = array_keys( $this->t_payloads );
 		$this->_chars = '\\' . implode('\\', $this->chars);
 
-		$this->reference = new TestIdorRequest();
-		$this->reference->setSanitizer( $this->chars );
-		$this->reference->setHost( $host );
-		$this->reference->setSsl( $ssl );
-		$this->reference->setUrl( $url );
-		$this->reference->setMethod( $method );
-		$this->reference->setHttp( $http );
-		$this->reference->setHeaders( $h_replay );
-		$this->reference->setCookies( $cookies );
-		$this->reference->setPost( $post );
 		$this->reference->request();
 		//var_dump( $this->reference );
 		//exit();

@@ -10,6 +10,8 @@ class TestIdorRequest
 {
 	private $sanitizer = array();
 
+	private $request_file = null;
+
 	private $host = '';
 
 	private $ssl = false;
@@ -66,6 +68,19 @@ class TestIdorRequest
 
 	public function getResultCode() {
 		return $this->result_code;
+	}
+
+
+	public function getRequestFile() {
+		return $this->request_file;
+	}
+	public function setRequestFile( $v ) {
+		if( is_file($v) ) {
+			$this->request_file = $v;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 
@@ -187,6 +202,72 @@ class TestIdorRequest
 		$this->result_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
 	}
 
+
+	public function loadFile( $file )
+	{
+		if( !$this->setRequestFile($file) ) {
+			return false;
+		}
+
+		$request = trim( file_get_contents($file) ); // the full request
+		$request = str_replace( "\r", "", $request );
+		$t_request = explode( "\n\n", $request ); // separate headers and post parameters
+		$t_headers = explode( "\n", $t_request[0] ); // headers
+		$h_request = array_map( function($str){return explode(':',trim($str));}, $t_headers ); // splited headers
+
+		$first = array_shift( $t_headers ); // first ligne is: method, url, http version
+		list($method,$url,$http) = explode( ' ', $first );
+
+		$post = ''; // post parameters
+		if( count($t_request) > 1 ) {
+			$post = $t_request[1];
+		}
+
+		$host = '';
+		$cookies = '';
+		$h_replay = array(); // headers kept in the replay request
+
+		foreach( $h_request as $header )
+		{
+			$h = trim( array_shift($header) );
+
+			switch( $h )
+			{
+				case 'Accept':
+				case 'Accept-Language':
+				case 'Accept-Encoding':
+				case 'Connection':
+				case 'Content-Type':
+				case 'Referer':
+				case 'User-Agent':
+					$h_replay[ $h ] = $h.': '.trim( implode(':',$header) );
+					break;
+
+				case 'Cookie':
+					$cookies = $h.': '.trim( implode(':',$header) );
+					break;
+
+				case 'Host':
+					$host = trim( implode(':',$header) );
+					break;
+
+				case 'Content-Length':
+				default:
+					break;
+			}
+		}
+
+		$this->setHost( $host );
+		$this->setUrl( $url );
+		$this->setMethod( $method );
+		$this->setHttp( $http );
+		$this->setHeaders( $h_replay );
+		$this->setCookies( $cookies );
+		$this->setPost( $post );
+
+
+		return true;
+	}
 
 	public function export()
 	{
