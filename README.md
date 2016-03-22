@@ -1,8 +1,8 @@
 # TestIdor
-PHP tool to test IDOR
+PHP tool to test IDOR.
 
 ```
-Usage: testidor.php [OPTIONS] -p <payloads> -f \<request_file\>
+Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
 
 Options:
 	-h	print this help
@@ -30,6 +30,4 @@ Examples:
 	testidor.php -t 10 -s -p "§=5;^=bob,alice,jim;$=123,456,789" -f request.txt
 ```
 
-I don't believe in license
-You can do want you want with this program
-- gwen -
+I don't believe in license. You can do want you want with this program.
