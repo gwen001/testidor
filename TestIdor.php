@@ -271,7 +271,7 @@ class TestIdor
 				$text .= ' -> REFERENCE';
 			} else {
 				$r->setIdor(true);
-				$text .= ' -> SOUNDS GOOD';
+				$text .= ' -> LENGTH OK';
 			}
 		}
 		else
