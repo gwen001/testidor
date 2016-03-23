@@ -14,6 +14,7 @@ include( 'TestIdorRequest.php' );
 // parse command line
 {
 	$testidor = new TestIdor();
+	$reference = new TestIdorRequest();
 
 	$ssl = false;
 	$argc = $_SERVER['argc'] - 1;
@@ -29,8 +30,12 @@ include( 'TestIdorRequest.php' );
 				TestIdor::help();
 				break;
 
+			case '-r':
+				$reference->setRedirect( false );
+				break;
+
 			case '-s':
-				$ssl = true;
+				$reference->setSsl( true );
 				break;
 
 			case '-t':
@@ -54,7 +59,6 @@ include( 'TestIdorRequest.php' );
 
 // init
 {
-	$reference = new TestIdorRequest();
 	if( !$reference->loadFile($request_file) ) {
 		TestIdor::help('Request file not found!');
 	}

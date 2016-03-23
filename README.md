@@ -4,12 +4,7 @@ A payload can be injected at multiple places, so each original values will be re
 A relative payload means that the original value will be incremented and decremented.  
 
 ```
-Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
-
-Options:
-	-h	print this help
-	-s	force https, default=off
-	-t	set tolerance for result output, default=5
+Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
 
 Payloads:
 	The program can deal with mutiple payloads
@@ -25,6 +20,12 @@ Payloads:
 	Injection points can be URL, headers, cookies
 	Check example.txt as a request example
 	Requests can be paste from Burp Suite
+
+Options:
+	-h	print this help
+	-r	do not follow redirection
+	-s	force https
+	-t	set tolerance for result output, default=5
 
 Examples:
 	testidor.php -p "§=10" -f request.txt

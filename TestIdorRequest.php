@@ -16,6 +16,8 @@ class TestIdorRequest
 
 	private $ssl = false;
 
+	private $redirect = true;
+
 	private $method = '';
 
 	private $http = '';
@@ -89,6 +91,15 @@ class TestIdorRequest
 	}
 	public function setHost( $v ) {
 		$this->host = $v;
+		return true;
+	}
+
+
+	public function getRedirect() {
+		return $this->redirect;
+	}
+	public function setRedirect( $v ) {
+		$this->redirect = (bool)$v;
 		return true;
 	}
 
@@ -185,7 +196,9 @@ class TestIdorRequest
 		curl_setopt($c, CURLOPT_URL, ($this->ssl?'https://':'http://').$this->host.$this->_url);
 		//curl_setopt($c, CURLOPT_HTTP_VERSION, $this->http);
 		curl_setopt($c, CURLOPT_HEADER, true);
-		curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
+		if( $this->redirect ) {
+			curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
+		}
 		curl_setopt($c, CURLOPT_COOKIE, $this->_cookies);
 		curl_setopt($c, CURLOPT_COOKIEJAR, $this->cookie_file);
 		curl_setopt($c, CURLOPT_COOKIEFILE, $this->cookie_file);

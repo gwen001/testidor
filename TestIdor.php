@@ -55,17 +55,18 @@ class TestIdor
 	{
 		echo "Usage: ".$_SERVER['argv'][0]." [OPTIONS] -p <payloads> -f <request_file>\n";
 		echo "\n";
-		echo "Options:\n";
-		echo "\t-h\tprint this help\n";
-		echo "\t-s\tforce https, default=off\n";
-		echo "\t-t\tset tolerance for result output, default=5\n";
-		echo "\n";
 		echo "Payloads:\n";
 		echo "\tThe program can deal with mutiple payloads\n";
 		echo "\tThe payloads will replace orginal values in the request\n";
 		echo "\tThe payloads can be strings, numerics or relative value\n";
 		echo "\tA payload is represented by a special character\n";
 		echo "\tEach payloads are evaluated separately\n";
+		echo "\n";
+		echo "Options:\n";
+		echo "\t-h\tprint this help\n";
+		echo "\t-r\tdo not follow redirection\n";
+		echo "\t-s\tforce https\n";
+		echo "\t-t\tset tolerance for result output, default=5\n";
 		echo "\n";
 		echo "\tPayloads must be separated by a ".self::PAYLOADS_DELIM."\n";
 		echo "\tPayloads values must be separated by a ".self::PAYLOADS_VALUE_DELIM."\n";
