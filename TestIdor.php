@@ -91,6 +91,8 @@ class TestIdor
 			}
 		}
 
+		$this->chars = array_keys( $this->t_payloads );
+		$this->_chars = '\\' . implode('\\', $this->chars);
 	}
 
 
@@ -120,14 +122,12 @@ class TestIdor
 	}
 	public function setReference( $v ) {
 		$this->reference = $v;
+		$this->reference->setSanitizer( $this->chars );
 		return true;
 	}
 
 	public function runReference()
 	{
-		$this->chars = array_keys( $this->t_payloads );
-		$this->_chars = '\\' . implode('\\', $this->chars);
-
 		$this->reference->request();
 		//var_dump( $this->reference );
 		//exit();

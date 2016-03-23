@@ -23,7 +23,9 @@ Payloads:
 	Requests can be paste from Burp Suite
 
 Options:
+	-f	source file of the orignal request
 	-h	print this help
+	-p	payloads configuation
 	-r	do not follow redirection
 	-s	force https
 	-t	set tolerance for result output, default=5%

@@ -59,12 +59,12 @@ include( 'TestIdorRequest.php' );
 
 // init
 {
+	$testidor->setReference( $reference );
 	if( !$reference->loadFile($request_file) ) {
 		Utils::help('Request file not found!');
 	}
 	$reference->setSsl( $ssl );
 
-	$testidor->setReference( $reference );
 	$testidor->runReference();
 }
 // ---
