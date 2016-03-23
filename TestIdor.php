@@ -51,45 +51,6 @@ class TestIdor
 	private $t_result = array();
 
 
-	public static function help( $error='' )
-	{
-		echo "Usage: ".$_SERVER['argv'][0]." [OPTIONS] -p <payloads> -f <request_file>\n";
-		echo "\n";
-		echo "Payloads:\n";
-		echo "\tThe program can deal with mutiple payloads\n";
-		echo "\tThe payloads will replace orginal values in the request\n";
-		echo "\tThe payloads can be strings, numerics or relative value\n";
-		echo "\tA payload is represented by a special character\n";
-		echo "\tEach payloads are evaluated separately\n";
-		echo "\n";
-		echo "Options:\n";
-		echo "\t-h\tprint this help\n";
-		echo "\t-r\tdo not follow redirection\n";
-		echo "\t-s\tforce https\n";
-		echo "\t-t\tset tolerance for result output, default=5\n";
-		echo "\n";
-		echo "\tPayloads must be separated by a ".self::PAYLOADS_DELIM."\n";
-		echo "\tPayloads values must be separated by a ".self::PAYLOADS_VALUE_DELIM."\n";
-		echo "\tNumeric values under ".self::PAYLOADS_CONSIDER_RELATIVE." are considered as relative\n";
-		echo "\n";
-		echo "\tInjection points can be URL, headers, cookies\n";
-		echo "\tCheck example.txt as a request file example\n";
-		echo "\tRequests can be paste from Burp Suite\n";
-		echo "\n";
-		echo "Examples:\n";
-		echo "\t".$_SERVER['argv'][0]." -p \"§=10\" -f request.txt\n";
-		echo "\t".$_SERVER['argv'][0]." -s -p \"^=bob,alice,jim\" -f request.txt\n";
-		echo "\t".$_SERVER['argv'][0]." -t 10 -s -p \"§=5;^=bob,alice,jim;$=123,456,789\" -f request.txt\n";
-		echo "\n";
-
-		if( $error ) {
-			echo "\nError: ".$error."!\n";
-		}
-
-		exit();
-	}
-
-
 	private function isRelative( $v )
 	{
 		if( !is_array($v) && preg_match('#[-0123456798]#',$v) && $v<self::PAYLOADS_CONSIDER_RELATIVE && $v>-self::PAYLOADS_CONSIDER_RELATIVE) {

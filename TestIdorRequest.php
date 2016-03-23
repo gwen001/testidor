@@ -192,9 +192,9 @@ class TestIdorRequest
 		$surplace = array();
 
 		$c = curl_init();
-		//curl_setopt($c, CURLOPT_CUSTOMREQUEST, $this->method);
+		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $this->method);
 		curl_setopt($c, CURLOPT_URL, ($this->ssl?'https://':'http://').$this->host.$this->_url);
-		//curl_setopt($c, CURLOPT_HTTP_VERSION, $this->http);
+		curl_setopt($c, CURLOPT_HTTP_VERSION, $this->http);
 		curl_setopt($c, CURLOPT_HEADER, true);
 		if( $this->redirect ) {
 			curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
@@ -204,9 +204,11 @@ class TestIdorRequest
 		curl_setopt($c, CURLOPT_COOKIEFILE, $this->cookie_file);
 		if( strlen($this->post) ) {
 			// this header seems to fuck the request...
-			//$surplace['Content-Length'] = 'Content-Length: '.strlen( $this->_post );
+			//$surplace['Content-Length'] = 'Content-Length: '.strlen( $this->post );
+			// but this works great!
+			$surplace['Content-Length'] = 'Content-Length: 0';
 			curl_setopt($c, CURLOPT_POST, true);
-			curl_setopt($c, CURLOPT_POSTFIELDS, $this->_post);
+			curl_setopt($c, CURLOPT_POSTFIELDS, $this->post);
 		}
 		curl_setopt($c, CURLOPT_HTTPHEADER, array_merge($this->_headers,$surplace));
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
@@ -248,7 +250,7 @@ class TestIdorRequest
 			{
 				case 'Accept':
 				case 'Accept-Language':
-				case 'Accept-Encoding':
+				//case 'Accept-Encoding':
 				case 'Connection':
 				case 'Content-Type':
 				case 'Referer':
@@ -277,7 +279,6 @@ class TestIdorRequest
 		$this->setHeaders( $h_replay );
 		$this->setCookies( $cookies );
 		$this->setPost( $post );
-
 
 		return true;
 	}

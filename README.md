@@ -2,6 +2,7 @@
 PHP tool to test Insecure Direct Object Reference aka IDOR.  
 A payload can be injected at multiple places, so each original values will be replaced at the same time.  
 A relative payload means that the original value will be incremented and decremented.  
+Note this is an automated tool, manual check still required.  
 
 ```
 Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
@@ -25,7 +26,7 @@ Options:
 	-h	print this help
 	-r	do not follow redirection
 	-s	force https
-	-t	set tolerance for result output, default=5
+	-t	set tolerance for result output, default=5%
 
 Examples:
 	testidor.php -p "§=10" -f request.txt

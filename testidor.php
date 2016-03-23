@@ -27,7 +27,7 @@ include( 'TestIdorRequest.php' );
 				break;
 
 			case '-h':
-				TestIdor::help();
+				Utils::help();
 				break;
 
 			case '-r':
@@ -51,7 +51,7 @@ include( 'TestIdorRequest.php' );
 	}
 
 	if( !$testidor->getPayloads() ) {
-		TestIdor::help('Payloads not found!');
+		Utils::help('Payloads not found!');
 	}
 }
 // ---
@@ -60,7 +60,7 @@ include( 'TestIdorRequest.php' );
 // init
 {
 	if( !$reference->loadFile($request_file) ) {
-		TestIdor::help('Request file not found!');
+		Utils::help('Request file not found!');
 	}
 	$reference->setSsl( $ssl );
 

@@ -29,6 +29,22 @@ class Utils
 	);
 
 
+	public static function help( $error='' )
+	{
+		if( is_file('README.md') ) {
+			echo file_get_contents( 'README.md' )."\n";
+		} else {
+			echo "No help found!\n";
+		}
+
+		if( $error ) {
+			echo "Error: ".$error."!\n";
+		}
+
+		exit();
+	}
+
+
 	public static function isEmail( $str )
 	{
 		return filter_var( $str, FILTER_VALIDATE_EMAIL );
