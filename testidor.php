@@ -21,6 +21,10 @@ include( 'TestIdorRequest.php' );
 
 	for ($i = 1; $i <= $argc; $i++) {
 		switch ($_SERVER['argv'][$i]) {
+			case '-cl':
+				$reference->setContentLength( true );
+				break;
+
 			case '-f':
 				$request_file = $_SERVER['argv'][$i + 1];
 				$i++;

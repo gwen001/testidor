@@ -1,8 +1,8 @@
 # TestIdor
-PHP tool to test Insecure Direct Object Reference aka IDOR.  
-A payload can be injected at multiple places, so each original values will be replaced at the same time.  
-A relative payload means that the original value will be incremented and decremented.  
-Note this is an automated tool, manual check still required.  
+PHP tool to test Insecure Direct Object Reference aka IDOR.
+A payload can be injected at multiple places, so each original values will be replaced at the same time.
+A relative payload means that the original value will be incremented and decremented.
+Note this is an automated tool, manual check still required.
 
 ```
 Usage: testidor.php [OPTIONS] -p <payloads> -f <request_file>
@@ -23,6 +23,7 @@ Payloads:
 	Requests can be paste from Burp Suite
 
 Options:
+	-cl	force Content-Length header
 	-f	source file of the orignal request
 	-h	print this help
 	-p	payloads configuation
@@ -36,8 +37,8 @@ Examples:
 	testidor.php -t 10 -s -p "|=5;^=bob,alice,jim;$=123,456,789" -f request.txt
 ```
 
-I don't believe in license.  
-You can do want you want with this program.  
+I don't believe in license.
+You can do want you want with this program.
 
 ![PoC on bWAPP]
 (https://raw.githubusercontent.com/gwen001/testidor/master/testidor_bwapp.png)

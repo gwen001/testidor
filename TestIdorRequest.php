@@ -35,6 +35,8 @@ class TestIdorRequest
 	private $post = '';
 	private $_post = '';
 
+	private $content_length = false;
+
 	private $result = '';
 	private $result_length = 0;
 	private $result_code = 0;
@@ -109,6 +111,15 @@ class TestIdorRequest
 	}
 	public function setSsl( $v ) {
 		$this->ssl = (bool)$v;
+		return true;
+	}
+
+
+	public function getContentLength() {
+		return $this->content_length;
+	}
+	public function setContentLength( $v ) {
+		$this->content_length = (bool)$v;
 		return true;
 	}
 
@@ -203,10 +214,12 @@ class TestIdorRequest
 		curl_setopt($c, CURLOPT_COOKIEJAR, $this->cookie_file);
 		curl_setopt($c, CURLOPT_COOKIEFILE, $this->cookie_file);
 		if( strlen($this->post) ) {
-			// this header seems to fuck the request...
-			//$surplace['Content-Length'] = 'Content-Length: '.strlen( $this->post );
-			// but this works great!
-			$surplace['Content-Length'] = 'Content-Length: 0';
+			if( $this->content_length ) {
+				// this header seems to fuck the request...
+				//$surplace['Content-Length'] = 'Content-Length: '.strlen( $this->post );
+				// but this works great!
+				$surplace['Content-Length'] = 'Content-Length: 0';
+			}
 			curl_setopt($c, CURLOPT_POST, true);
 			curl_setopt($c, CURLOPT_POSTFIELDS, $this->post);
 		}
