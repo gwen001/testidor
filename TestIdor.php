@@ -154,7 +154,7 @@ class TestIdor
 					$n_injection += $this->inject( $r, $char, $p, 'getHeader', 'setHeader', $k );
 				}
 				$n_injection += $this->inject( $r, $char, $p, 'getCookies', 'setCookies' );
-				$n_injection += $this->inject( $r, $char, $p, 'getPost', 'setPost' );
+				$n_injection += $this->inject( $r, $char, $p, 'getParams', 'setParams' );
 
 				if( $n_injection ) {
 					$r->request();
@@ -243,8 +243,8 @@ class TestIdor
 
 	private function isReference( $request )
 	{
-		if( $request->getUrl()!=$this->reference->getUrl() || $request->getHeaders()!=$this->reference->getHeaders()
-			|| $request->getCookies()!=$this->reference->getCookies() || $request->getPost()!=$this->reference->getPost() ) {
+		if( $request->getUrl()!=$this->reference->getUrl() || $request->getHeaders(true)!=$this->reference->getHeaders(true)
+			|| $request->getCookies(true)!=$this->reference->getCookies(true) || $request->getParams(true)!=$this->reference->getParams(true) ) {
 			return false;
 		}
 

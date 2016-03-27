@@ -7,6 +7,7 @@
  */
 
 include( 'Utils.php' );
+include( 'HttpRequest.php' );
 include( 'TestIdor.php' );
 include( 'TestIdorRequest.php' );
 
