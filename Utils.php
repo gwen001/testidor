@@ -32,7 +32,11 @@ class Utils
 	public static function help( $error='' )
 	{
 		if( is_file('README.md') ) {
-			echo file_get_contents( 'README.md' )."\n";
+			$help = file_get_contents( 'README.md' )."\n";
+			preg_match_all( '#```(.*)```#s', $help, $matches );
+			if( count($matches[1]) ) {
+				echo trim($matches[1][0])."\n\n";
+			}
 		} else {
 			echo "No help found!\n";
 		}
