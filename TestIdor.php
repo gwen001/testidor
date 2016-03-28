@@ -126,14 +126,16 @@ class TestIdor
 		return true;
 	}
 
+
 	public function runReference()
 	{
 		$this->reference->request();
 		//var_dump( $this->reference );
-		//exit();
+		//$this->reference->export();
 
 		$this->_tolerance = (int)($this->reference->getResultLength() * $this->getTolerance() / 100);
 		echo "\n-> Reference: RC=" . $this->reference->getResultCode() . ', RL=' . $this->reference->getResultLength() . ', T=' . $this->getTolerance() . '%, T2=' . $this->_tolerance . "\n";
+		//exit();
 	}
 
 
@@ -149,12 +151,12 @@ class TestIdor
 				$r = clone $this->reference;
 
 				$n_injection = 0;
-				$n_injection += $this->inject( $r, $char, $p, 'getUrl', 'setUrl' );
+				$n_injection += $this->inject( $r, $char, $p, 'getOriginalUrl', 'setUrl' );
 				foreach( $this->reference->getHeaders() as $k=>$v ) {
-					$n_injection += $this->inject( $r, $char, $p, 'getHeader', 'setHeader', $k );
+					$n_injection += $this->inject( $r, $char, $p, 'getOriginalHeader', 'setHeader', $k );
 				}
-				$n_injection += $this->inject( $r, $char, $p, 'getCookies', 'setCookies' );
-				$n_injection += $this->inject( $r, $char, $p, 'getParams', 'setParams' );
+				$n_injection += $this->inject( $r, $char, $p, 'getOriginalCookies', 'setCookies' );
+				$n_injection += $this->inject( $r, $char, $p, 'getOriginalParams', 'setParams' );
 
 				if( $n_injection ) {
 					$r->request();

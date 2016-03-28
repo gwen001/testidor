@@ -52,6 +52,9 @@ include( 'TestIdorRequest.php' );
 				$testidor->parsePayloads($_SERVER['argv'][$i + 1]);
 				$i++;
 				break;
+
+			default:
+				Utils::help('Unknown option: '.$_SERVER['argv'][$i]);
 		}
 	}
 
@@ -65,10 +68,10 @@ include( 'TestIdorRequest.php' );
 // init
 {
 	$testidor->setReference( $reference );
+
 	if( !$reference->loadFile($request_file) ) {
 		Utils::help('Request file not found!');
 	}
-	$reference->setSsl( $ssl );
 
 	$testidor->runReference();
 }

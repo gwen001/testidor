@@ -34,28 +34,39 @@ class TestIdorRequest extends HttpRequest
 	}
 
 
+	public function getOriginalUrl( $null='' ) {
+		return $this->_url;
+	}
 	public function setUrl($v, $null='' ) {
-		parent::setUrl( $v );
-		$this->_url = self::sanitize( $v );
+		parent::setUrl( $this->sanitize($v) );
+		$this->_url = $v;
 	}
 
 
+	public function getOriginalHeader( $key ) {
+		return $this->_headers[$key];
+	}
 	public function setHeader($v, $key) {
-		parent::setHeader( $v, $key );
-		$this->_headers[$key] = self::sanitize($v);
+		parent::setHeader( $this->sanitize($v), $key );
+		$this->_headers[$key] = $v;
 	}
 
 
+	public function getOriginalCookies( $null='' ) {
+		return $this->_cookies;
+	}
 	public function setCookies($v, $null = '') {
-		parent::setCookies( $v );
-		$this->_cookies = self::sanitize( $v );
+		parent::setCookies( $this->sanitize($v) );
+		$this->_cookies = $v;
 	}
 
 
-	public function setPost($v, $null = '')
-	{
-		parent::setPost( $v );
-		$this->_params = self::sanitize( $v );
+	public function getOriginalParams( $null='' ) {
+		return $this->_params;
+	}
+	public function setParams($v, $null = '') {
+		parent::setParams( $this->sanitize($v) );
+		$this->_params = $v;
 	}
 
 
@@ -64,40 +75,6 @@ class TestIdorRequest extends HttpRequest
 	}
 	public function setIdor($v) {
 		$this->idor = (bool)$v;
-	}
-
-
-	private function swapData()
-	{
-		$this->__url = $this->url;
-		$this->__headers = $this->headers;
-		$this->__cookies = $this->cookies;
-		$this->__params = $this->params;
-	}
-
-
-	private function swapDataBack()
-	{
-		$this->url = $this->__url;
-		$this->headers = $this->__headers;
-		$this->cookies = $this->__cookies;
-		$this->params = $this->__params;
-	}
-
-
-	public function request()
-	{
-		$this->swapData();
-		parent::request();
-		$this->swapDataBack();
-	}
-
-
-	public function export( $echo=true )
-	{
-		$this->swapData();
-		parent::export( $echo );
-		$this->swapDataBack();
 	}
 }
 
