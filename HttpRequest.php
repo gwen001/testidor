@@ -123,8 +123,12 @@ class HttpRequest
 	}
 
 
-	public function getUrl() {
-		return $this->url;
+	public function getUrl( $base64=false ) {
+		$v = $this->url;
+		if( $base64 ) {
+			$v = base64_encode( serialize($v) );
+		}
+		return $v;
 	}
 	public function setUrl($v) {
 		$this->url = $v;
